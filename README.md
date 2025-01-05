@@ -1,4 +1,10 @@
-# Blink(1) Integration
+# Blink(1) Integration - Fork with new ColorMode
+
+Forked from: https://github.com/tnagels/ha-blink1_status
+Updated light.py with newer ColorModes.
+Seems to work on my HomeAssistant Configuration, but use with caution and ON YOUR OWN RISK! (to Backups and stuff....)
+
+
 
 This integration sets up and uses a Blink(1) usb status led for use within Home Assistant.
 
