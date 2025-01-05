@@ -8,11 +8,8 @@ import homeassistant.util.color as color_util
 
 # Import the device class from the component that you want to support
 from homeassistant.components.light import (
-    ATTR_BRIGHTNESS,
-    ATTR_HS_COLOR,
-    SUPPORT_BRIGHTNESS,
-    SUPPORT_COLOR,
-    PLATFORM_SCHEMA,
+    ATTR_SUPPORTED_COLOR_MODES,
+    COLOR_MODE_RGB,
     LightEntity,
 )
 
