@@ -34,6 +34,16 @@ class blink1_status(LightEntity):
         self._hs_color = [0, 0]
         self._brightness = 0
 
+    #added new
+    @property
+    def supported_color_modes(self):
+        return {COLOR_MODE_RGB}
+    
+    #added new
+    @property
+    def color_mode(self):
+        return COLOR_MODE_RGB
+    
     @property
     def brightness(self):
         """Read back the brightness of the light."""
