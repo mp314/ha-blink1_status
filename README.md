@@ -1,6 +1,7 @@
 # Blink(1) Integration - Fork with new ColorMode
 
 Forked from: https://github.com/tnagels/ha-blink1_status
+
 Updated light.py with newer ColorModes.
 So it's only needed to switch the light.py file in the blink1_status Folder
 
