@@ -8,7 +8,7 @@ import homeassistant.util.color as color_util
 
 # Import the device class from the component that you want to support
 from homeassistant.components.light import (
-    ATTR_SUPPORTED_COLOR_MODES,
+    # ATTR_SUPPORTED_COLOR_MODES,
     COLOR_MODE_RGB,
     LightEntity,
 )
@@ -37,11 +37,13 @@ class blink1_status(LightEntity):
     #added new
     @property
     def supported_color_modes(self):
+        """Return the supported color modes."""
         return {COLOR_MODE_RGB}
     
     #added new
     @property
     def color_mode(self):
+        """Return the current color mode."""
         return COLOR_MODE_RGB
     
     @property
@@ -49,10 +51,11 @@ class blink1_status(LightEntity):
         """Read back the brightness of the light."""
         return self._brightness
 
-    @property
-    def supported_features(self):
-        """Flag supported features."""
-        return SUPPORT_BRIGHTNESS | SUPPORT_COLOR
+    #removed new
+    # @property
+    # def supported_features(self):
+    #    """Flag supported features."""
+    #    return SUPPORT_BRIGHTNESS | SUPPORT_COLOR
 
     @property
     def name(self):
