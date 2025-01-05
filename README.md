@@ -2,7 +2,7 @@
 
 Forked from: https://github.com/tnagels/ha-blink1_status
 
-Updated light.py with newer ColorModes.
+Updated light.py with newer ColorModes.<br>
 So it's only needed to switch the light.py file in the blink1_status Folder
 
 Seems to work on my HomeAssistant Configuration, but use with caution and ON YOUR OWN RISK! (do Backups and stuff....)
