@@ -8,19 +8,21 @@ import homeassistant.util.color as color_util
 
 # Import the device class from the component that you want to support
 from homeassistant.components.light import (
-    # ATTR_SUPPORTED_COLOR_MODES,
-    COLOR_MODE_RGB,
+    ATTR_BRIGHTNESS,
+    ATTR_HS_COLOR,
+    ATTR_SUPPORTED_COLOR_MODES,
+    ColorMode,
     LightEntity,
 )
 
 _LOGGER = logging.getLogger(__name__)
 
 
-def setup_platform(hass, config, add_entities, discovery_info=None):
-    # Add devices
+async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
+    """Set up the Blink(1) light platform."""
     from blink1.blink1 import Blink1
     b1 = Blink1()
-    add_entities([blink1_status(b1)])
+    async_add_entities([blink1_status(b1)])    
 
 
 class blink1_status(LightEntity):
@@ -34,28 +36,27 @@ class blink1_status(LightEntity):
         self._hs_color = [0, 0]
         self._brightness = 0
 
-    #added new
+    #new
     @property
     def supported_color_modes(self):
         """Return the supported color modes."""
-        return {COLOR_MODE_RGB}
-    
-    #added new
+        return {ColorMode.HS}
+
+    #new
     @property
     def color_mode(self):
         """Return the current color mode."""
-        return COLOR_MODE_RGB
-    
+        return ColorMode.HS
+
     @property
     def brightness(self):
         """Read back the brightness of the light."""
         return self._brightness
 
-    #removed new
-    # @property
-    # def supported_features(self):
-    #    """Flag supported features."""
-    #    return SUPPORT_BRIGHTNESS | SUPPORT_COLOR
+#    @property
+#    def supported_features(self):
+#        """Flag supported features."""
+#        return SUPPORT_BRIGHTNESS | SUPPORT_COLOR
 
     @property
     def name(self):
@@ -78,16 +79,34 @@ class blink1_status(LightEntity):
             self._hs_color = kwargs[ATTR_HS_COLOR]
         if ATTR_BRIGHTNESS in kwargs:
             self._brightness = kwargs[ATTR_BRIGHTNESS]
+
+        hs_color = [
+            max(0, min(360, self._hs_color[0])),
+            max(0, min(255, self._hs_color[1]))
+        ]
+        brightness = max(0, min(self._brightness, 255))
+            
+            
         self._state = True
         rgb_color = color_util.color_hsv_to_RGB(self._hs_color[0], self._hs_color[1], self._brightness / 255 * 100)
         hex_color = "#" + color_util.color_rgb_to_hex(*rgb_color)
         self._light.fade_to_rgb(100, *rgb_color)
-
 
     def turn_off(self, **kwargs):
         """Instruct the light to turn off."""
         self._state = False
         self._light.off()
 
+
     def update(self):
-        """There is not data to get as we use an assumed state."""
+        """Fetch the latest state from the device."""
+    #   """There is not data to get as we use an assumed state."""
+        #try:
+        #    self._state = True  # Hier könntest du echte Daten vom Gerät abrufen
+        #    self._hs_color = [0, 0]
+        #    self._brightness = 255
+        #except Exception as e:
+        #    _LOGGER.error("Failed to fetch light state: %s", e)
+
+
+
