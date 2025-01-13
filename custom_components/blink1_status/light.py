@@ -53,11 +53,6 @@ class blink1_status(LightEntity):
         """Read back the brightness of the light."""
         return self._brightness
 
-#    @property
-#    def supported_features(self):
-#        """Flag supported features."""
-#        return SUPPORT_BRIGHTNESS | SUPPORT_COLOR
-
     @property
     def name(self):
         """Return the display name of this light."""
@@ -73,40 +68,47 @@ class blink1_status(LightEntity):
         """Return true if light is on."""
         return self._state
 
-    def turn_on(self, **kwargs):
+    async def async_turn_on(self, **kwargs):
         """Instruct the light to turn on."""
-        if ATTR_HS_COLOR in kwargs:
-            self._hs_color = kwargs[ATTR_HS_COLOR]
-        if ATTR_BRIGHTNESS in kwargs:
-            self._brightness = kwargs[ATTR_BRIGHTNESS]
+        try:
+            if ATTR_HS_COLOR in kwargs:
+                self._hs_color = kwargs[ATTR_HS_COLOR]
+            if ATTR_BRIGHTNESS in kwargs:
+                self._brightness = kwargs[ATTR_BRIGHTNESS]
 
-        hs_color = [
-            max(0, min(360, self._hs_color[0])),
-            max(0, min(255, self._hs_color[1]))
-        ]
-        brightness = max(0, min(self._brightness, 255))
-            
-            
-        self._state = True
-        rgb_color = color_util.color_hsv_to_RGB(self._hs_color[0], self._hs_color[1], self._brightness / 255 * 100)
-        hex_color = "#" + color_util.color_rgb_to_hex(*rgb_color)
-        self._light.fade_to_rgb(100, *rgb_color)
+            # Werte validieren
+            hs_color = [
+                max(0, min(360, self._hs_color[0])),
+                max(0, min(100, self._hs_color[1]))
+            ]
+            brightness = max(0, min(self._brightness, 255))
 
-    def turn_off(self, **kwargs):
+            self._state = True
+            rgb_color = color_util.color_hsv_to_RGB(
+                hs_color[0], hs_color[1], brightness / 255 * 100)
+
+            await self.hass.async_add_executor_job(self._light.fade_to_rgb, 100, *rgb_color)
+
+            _LOGGER.debug("Turned on light: HS=%s, Brightness=%d", hs_color, brightness)
+
+        except Exception as e:
+            _LOGGER.error("Failed to turn on the light: %s", e)
+
+    async def async_turn_off(self, **kwargs):
         """Instruct the light to turn off."""
-        self._state = False
-        self._light.off()
+        try:
+            self._state = False
+
+            await self.hass.async_add_executor_job(self._light.off)
+
+            _LOGGER.debug("Turned off light.")
+        except Exception as e:
+            _LOGGER.error("Failed to turn off the light: %s", e)
 
 
     def update(self):
         """Fetch the latest state from the device."""
     #   """There is not data to get as we use an assumed state."""
-        #try:
-        #    self._state = True  # Hier könntest du echte Daten vom Gerät abrufen
-        #    self._hs_color = [0, 0]
-        #    self._brightness = 255
-        #except Exception as e:
-        #    _LOGGER.error("Failed to fetch light state: %s", e)
 
 
 
