@@ -32,7 +32,7 @@ class blink1_status(LightEntity):
         """Initialize an AwesomeLight."""
         self._light = light
         self._name = "Blink1"
-        self._state = None
+        self._state = False
         self._hs_color = [0, 0]
         self._brightness = 0
 
