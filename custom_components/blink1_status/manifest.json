@@ -1,9 +1,9 @@
 {
   "domain": "blink1_status",
   "name": "Blink(1) Status Light",
-  "documentation": "https://github.com/KenGuru123/ha-blink1_status",
+  "documentation": "https://github.com/mp314/ha-blink1_status",
   "dependencies": [],
   "codeowners": [],
   "requirements": ["blink1"],
-  "version": "0.2.1"
+  "version": "0.2.2"
 }
